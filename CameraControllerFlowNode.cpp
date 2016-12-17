@@ -8,10 +8,10 @@ CameraControllerFlowNode::CameraControllerFlowNode(Context* context) :
 void CameraControllerFlowNode::Update(float timeStep)
 {
     // Получаем указатель на ноду камеры из входного порта.
-    Node* cameraNode = static_cast<Node*>(inputs_["CameraNode"].GetData().GetVoidPtr());
+    Node* cameraNode = static_cast<Node*>(inputs_["CameraNode"].ReadData().GetVoidPtr());
     
     // Получаем чувствительность мышки из входного порта.
-    float mouseSensitivity = inputs_["MouseSensitivity"].GetData().GetFloat();
+    float mouseSensitivity = inputs_["MouseSensitivity"].ReadData().GetFloat();
 
     Input* input = GetSubsystem<Input>();
     IntVector2 mouseMove = input->GetMouseMove();

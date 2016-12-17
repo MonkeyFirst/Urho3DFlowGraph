@@ -1,6 +1,6 @@
 #include "FlowNode.h"
 
-Variant FlowNodePort::GetData()
+Variant FlowNodePort::ReadData()
 {
     if (!connectedNode_.Expired()) // Если есть подключенная флоунода входная нода
     {

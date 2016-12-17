@@ -18,7 +18,7 @@ struct FlowNodePort
     // и возвращает данные из ее выходного порта.
     // Если к порту ничег оне подключено, но возвращает data_ (то есть значение, заданное пользователем).
     // Пока этого не сделано, просто возвращает data_;
-    Variant GetData();
+    Variant ReadData();
 };
 
 class URHO3D_API FlowNode : public Serializable

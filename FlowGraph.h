@@ -4,7 +4,7 @@
 
 class URHO3D_API FlowGraph : public Serializable
 {
-    URHO3D_OBJECT(FlowGraph, Object);
+    URHO3D_OBJECT(FlowGraph, Serializable);
 
 public:
     FlowGraph(Context* context);
