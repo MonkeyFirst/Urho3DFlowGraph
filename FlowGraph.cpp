@@ -12,11 +12,40 @@ void FlowGraph::HandleUpdate(StringHash eventType, VariantMap& eventData)
 
     float timeStep = eventData[P_TIMESTEP].GetFloat();
 
-    // Как-то надо запретить создание нод в процессе апдейта.
-    for (Vector<SharedPtr<FlowNode> >::Iterator i = nodes_.Begin(); i != nodes_.End(); ++i)
+    // Цикл, пока код всех флоунод не будет выполнен.
+    while (true)
     {
-        FlowNode* node = *i;
-        node->Update(timeStep);
+        // Остались ли ще не выполненные ноды.
+        // В этом случае цикл продолжится.
+        bool isNotUpdated = false;
+
+        // Цикл по всем флоунодам в графе.
+        for (Vector<SharedPtr<FlowNode> >::Iterator i = nodes_.Begin(); i != nodes_.End(); ++i)
+        {
+            FlowNode* node = *i;
+
+            // Нода уже обновлена, не трогаем ее.
+            if (node->IsUpdated())
+                continue;
+
+            // У ноды не обновлены входящие соединения. Пока не выполняем текущую ноду,
+            // а ждем одновления входящих нод.
+            if (!node->IsInputNodesUpdated())
+            {
+                isNotUpdated = true;
+                continue;
+            }
+
+            // Входящие ноды обновлены, все нормально.
+            node->Update(timeStep);
+
+            // Помечаем ноду как выполненную.
+            node->lastUpdateFrameNumber_ = GetSubsystem<Time>()->GetFrameNumber();
+        }
+
+        // Прерываем цикл, когда не было найдено необновленных нод.
+        if (!isNotUpdated)
+            break;
     }
 }
 

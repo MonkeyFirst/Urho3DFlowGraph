@@ -19,3 +19,23 @@ FlowNode::FlowNode(Context* context) :
 void FlowNode::Update(float timeStep)
 {
 }
+
+bool FlowNode::IsUpdated()
+{
+    // Была ли флоунода выполнена в текущем кадре.
+    return (GetSubsystem<Time>()->GetFrameNumber() == lastUpdateFrameNumber_);
+}
+
+bool FlowNode::IsInputNodesUpdated()
+{
+    for (HashMap<StringHash, FlowNodePort>::Iterator i = inputs_.Begin(); i != inputs_.End(); ++i)
+    {
+        FlowNodePort port = i->second_;
+
+        // Если подключена входящая нода и она нге обновлена, то прекращаем
+        if (!port.connectedNode_.Expired() && !port.connectedNode_ - IsUpdated())
+            return false;
+    }
+    
+    return true;
+}
