@@ -2,10 +2,8 @@
 
 Variant FlowNodePort::ReadData()
 {
-    if (!connectedNode_.Expired()) // Если есть подключенная флоунода входная нода
-    {
-        // Тут надо получить выходные данные входной ноды, но пока этого нет.
-    }
+    if (!connectedPort_.Expired())
+        return connectedPort_->data_;
 
     return data_;
 }
@@ -32,8 +30,8 @@ bool FlowNode::IsInputNodesUpdated()
     {
         FlowNodePort port = i->second_;
 
-        // Если подключена входящая нода и она нге обновлена, то прекращаем
-        if (!port.connectedNode_.Expired() && !port.connectedNode_ - IsUpdated())
+        // Если подключена входящая нода и она не обновлена, то прекращаем
+        if (!port.connectedPort_.Expired() && !port.connectedPort_->node_->IsUpdated())
             return false;
     }
     

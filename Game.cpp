@@ -1,6 +1,8 @@
 #include <Urho3D/Urho3DAll.h>
 #include "FlowGraph.h"
 #include "CameraControllerFlowNode.h"
+#include "CubeCreatorFlowNode.h"
+#include "StarterFlowNode.h"
 
 class Game : public Application
 {
@@ -109,10 +111,28 @@ public:
         SharedPtr<CameraControllerFlowNode> cameraController(new CameraControllerFlowNode(context_));
         // Записываем данные в входные порты. Пользователь может это делать в редакторе.
         cameraController->inputs_["CameraNode"].data_ = (void*)scene_->GetChild("Camera");
+        cameraController->inputs_["CameraNode"].node_ = (CameraControllerFlowNode*)cameraController;
         cameraController->inputs_["MouseSensitivity"].data_ = 0.1f;
-
-        // И добавляем эту флоуноду в граф.
+        cameraController->inputs_["MouseSensitivity"].node_ = (CameraControllerFlowNode*)cameraController;
+        // Добавляем эту флоуноду в граф.
         flowGraphExample_->nodes_.Push(cameraController);
+
+        // Пример цепочки нод. Первая нода отправляет сигнал при запуске (первом апдейте), а вторая создает куб при входящем сигнале.
+        
+        SharedPtr<StarterFlowNode> starter(new StarterFlowNode(context_));
+        flowGraphExample_->nodes_.Push(starter);
+
+        SharedPtr<CubeCreatorFlowNode> cubeCreator(new CubeCreatorFlowNode(context_));
+        //cubeCreator->inputs_["Started"].data_ = true;
+        cubeCreator->inputs_["Started"].node_ = (CubeCreatorFlowNode*)cubeCreator;
+        cubeCreator->inputs_["Scene"].data_ = (void*)scene_;
+        cubeCreator->inputs_["Scene"].node_ = (CubeCreatorFlowNode*)cubeCreator;
+        flowGraphExample_->nodes_.Push(cubeCreator);
+
+        // Присоединяем криэйтор к стартеру.
+        // Переделать на указатели нужно.
+        //cubeCreator->inputs_["Started"].connectedPort_ = WeakPtr(starter->outputs_["Started"];
+
     }
 
 };
