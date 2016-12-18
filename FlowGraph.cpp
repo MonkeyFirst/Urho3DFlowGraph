@@ -23,7 +23,7 @@ void FlowGraph::HandleUpdate(StringHash eventType, VariantMap& eventData)
     {
         // Остались ли еще требующие апдейта флауноды.
         // В этом случае цикл продолжится.
-        bool isNotUpdated = false;
+        bool existsNotUpdated = false;
 
         // Цикл по всем флоунодам в графе.
         for (Vector<SharedPtr<FlowNode> >::Iterator i = nodes_.Begin(); i != nodes_.End(); ++i)
@@ -38,7 +38,7 @@ void FlowGraph::HandleUpdate(StringHash eventType, VariantMap& eventData)
             // а ждем одновления входящих нод.
             if (!node->IsInputNodesUpdated())
             {
-                isNotUpdated = true;
+                existsNotUpdated = true;
                 continue;
             }
 
@@ -50,7 +50,7 @@ void FlowGraph::HandleUpdate(StringHash eventType, VariantMap& eventData)
         }
 
         // Прерываем цикл, когда не было найдено необновленных нод.
-        if (!isNotUpdated)
+        if (!existsNotUpdated)
             break;
     }
 }

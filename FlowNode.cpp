@@ -11,7 +11,7 @@ void FlowNode::Update(float timeStep)
 
 bool FlowNode::IsInputNodesUpdated()
 {
-    for (HashMap<StringHash, SharedPtr<FlowInputPort> >::Iterator i = inputs_.Begin(); i != inputs_.End(); ++i)
+    for (HashMap<String, SharedPtr<FlowInputPort> >::Iterator i = inputs_.Begin(); i != inputs_.End(); ++i)
     {
         FlowInputPort* port = i->second_;
 

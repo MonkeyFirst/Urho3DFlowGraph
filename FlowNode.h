@@ -23,8 +23,8 @@ public:
     virtual void Update(float timeStep);
 
     // Порты флауноды.
-    HashMap<StringHash, SharedPtr<FlowInputPort> > inputs_;
-    HashMap<StringHash, SharedPtr<FlowOutputPort> > outputs_;
+    HashMap<String, SharedPtr<FlowInputPort> > inputs_;
+    HashMap<String, SharedPtr<FlowOutputPort> > outputs_;
 
     // Требуется ли выполнить апдейт для этой флауноды.
     bool needUpdate_ = true;
