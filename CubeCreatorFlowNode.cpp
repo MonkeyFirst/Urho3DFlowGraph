@@ -3,18 +3,26 @@
 CubeCreatorFlowNode::CubeCreatorFlowNode(Context* context) :
     FlowNode(context)
 {
+    // Создаем входные порты.
+    SharedPtr<FlowInputPort> signalInputPort(new FlowInputPort(context));
+    signalInputPort->node_ = this;
+    inputs_["Create!"] = signalInputPort;
+
+    SharedPtr<FlowInputPort> sceneInputPort(new FlowInputPort(context));
+    sceneInputPort->node_ = this;
+    inputs_["Scene"] = sceneInputPort;
 }
 
 void CubeCreatorFlowNode::Update(float timeStep)
 {
     // Получаем сигнал к действию.
-    bool signal = inputs_["Started"].ReadData().GetBool();
+    bool signal = inputs_["Create!"]->ReadData().GetBool();
 
     if (!signal)
         return;
 
     // Получаем указатель на сцену из входного порта.
-    Scene* scene = static_cast<Scene*>(inputs_["Scene"].ReadData().GetVoidPtr());
+    Scene* scene = static_cast<Scene*>(inputs_["Scene"]->ReadData().GetVoidPtr());
 
     // Создаем куб в некоторой окрестности от нуля.
     ResourceCache* cache = GetSubsystem<ResourceCache>();

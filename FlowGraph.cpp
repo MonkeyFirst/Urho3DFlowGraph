@@ -9,13 +9,19 @@ FlowGraph::FlowGraph(Context* context) :
 void FlowGraph::HandleUpdate(StringHash eventType, VariantMap& eventData)
 {
     using namespace Update;
-
     float timeStep = eventData[P_TIMESTEP].GetFloat();
+
+    // Все ноды помечаются как неапдейченные.
+    for (Vector<SharedPtr<FlowNode> >::Iterator i = nodes_.Begin(); i != nodes_.End(); ++i)
+    {
+        FlowNode* node = *i;
+        node->needUpdate_ = true;
+    }
 
     // Цикл, пока код всех флоунод не будет выполнен.
     while (true)
     {
-        // Остались ли ще не выполненные ноды.
+        // Остались ли еще требующие апдейта флауноды.
         // В этом случае цикл продолжится.
         bool isNotUpdated = false;
 
@@ -25,7 +31,7 @@ void FlowGraph::HandleUpdate(StringHash eventType, VariantMap& eventData)
             FlowNode* node = *i;
 
             // Нода уже обновлена, не трогаем ее.
-            if (node->IsUpdated())
+            if (node->needUpdate_ == false)
                 continue;
 
             // У ноды не обновлены входящие соединения. Пока не выполняем текущую ноду,
@@ -36,11 +42,11 @@ void FlowGraph::HandleUpdate(StringHash eventType, VariantMap& eventData)
                 continue;
             }
 
-            // Входящие ноды обновлены, все нормально.
+            // Входящие ноды обновлены, все нормально. Можно апдейтить и эту ноду.
             node->Update(timeStep);
 
             // Помечаем ноду как выполненную.
-            node->lastUpdateFrameNumber_ = GetSubsystem<Time>()->GetFrameNumber();
+            node->needUpdate_ = false;
         }
 
         // Прерываем цикл, когда не было найдено необновленных нод.

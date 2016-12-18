@@ -104,35 +104,37 @@ public:
 
     void CreateFlowGraph()
     {
-        // Создаем граф. Граф управляет очередностью выполнения кода в флоунодах.
+        // Создаем граф. Граф управляет очередностью выполнения кода в флаунодах.
         flowGraphExample_ = new FlowGraph(context_);
 
-        // Пример флоуноды, которая управляет камерой.
+        // Пример флауноды, которая управляет камерой.
         SharedPtr<CameraControllerFlowNode> cameraController(new CameraControllerFlowNode(context_));
         // Записываем данные в входные порты. Пользователь может это делать в редакторе.
-        cameraController->inputs_["CameraNode"].data_ = (void*)scene_->GetChild("Camera");
-        cameraController->inputs_["CameraNode"].node_ = (CameraControllerFlowNode*)cameraController;
-        cameraController->inputs_["MouseSensitivity"].data_ = 0.1f;
-        cameraController->inputs_["MouseSensitivity"].node_ = (CameraControllerFlowNode*)cameraController;
-        // Добавляем эту флоуноду в граф.
+        // Сами порты уже созданы в конструкторе CameraControllerFlowNode.
+        cameraController->inputs_["CameraNode"]->data_ = (void*)scene_->GetChild("Camera");
+        cameraController->inputs_["MouseSensitivity"]->data_ = 0.1f;
+        // Добавляем эту флауноду в граф.
         flowGraphExample_->nodes_.Push(cameraController);
 
-        // Пример цепочки нод. Первая нода отправляет сигнал при запуске (первом апдейте), а вторая создает куб при входящем сигнале.
+        // Пример цепочки нод. Первая флоунода отправляет сигнал при запуске (первом апдейте), а вторая создает куб при входящем сигнале.
         
         SharedPtr<StarterFlowNode> starter(new StarterFlowNode(context_));
         flowGraphExample_->nodes_.Push(starter);
 
         SharedPtr<CubeCreatorFlowNode> cubeCreator(new CubeCreatorFlowNode(context_));
-        //cubeCreator->inputs_["Started"].data_ = true;
-        cubeCreator->inputs_["Started"].node_ = (CubeCreatorFlowNode*)cubeCreator;
-        cubeCreator->inputs_["Scene"].data_ = (void*)scene_;
-        cubeCreator->inputs_["Scene"].node_ = (CubeCreatorFlowNode*)cubeCreator;
+        cubeCreator->inputs_["Create!"]->data_ = true;
+        cubeCreator->inputs_["Scene"]->data_ = (void*)scene_;
         flowGraphExample_->nodes_.Push(cubeCreator);
 
-        // Присоединяем криэйтор к стартеру.
-        // Переделать на указатели нужно.
-        //cubeCreator->inputs_["Started"].connectedPort_ = WeakPtr(starter->outputs_["Started"];
-
+        // Присоединяем криэйтор к стартеру. Все указатели вручную расставляются.
+        // Потом надо будет написать функцию, которая все это будет делать.
+        SharedPtr<FlowEdge> link(new FlowEdge(context_));
+        link->fromPort_ = starter->outputs_["Start"];
+        link->toPort_ = cubeCreator->inputs_["Create!"];
+        starter->outputs_["Start"]->edge_ = link;
+        cubeCreator->inputs_["Create!"]->edge_ = link;
+        // Указатель на дугу надо хранить, чтоб не самоуничтожилась.
+        flowGraphExample_->edges_.Push(link);
     }
 
 };
