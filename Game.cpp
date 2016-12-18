@@ -128,13 +128,6 @@ public:
 
         // Присоединяем криэйтор к стартеру.
         flowGraphExample_->Connect(starter->outputs_["Start"], cubeCreator->inputs_["Create!"]);
-/*        SharedPtr<FlowEdge> link(new FlowEdge(context_));
-        link->fromPort_ = starter->outputs_["Start"];
-        link->toPort_ = cubeCreator->inputs_["Create!"];
-        starter->outputs_["Start"]->edge_ = link;
-        cubeCreator->inputs_["Create!"]->edge_ = link;
-        // Указатель на дугу надо хранить, чтоб не самоуничтожилась.
-        flowGraphExample_->edges_.Push(link);*/
     }
 
 };
