@@ -21,6 +21,9 @@ public:
     // Этот список нужен, чтобы SharedPtr не самоудалялись.
     Vector<SharedPtr<FlowEdge> > edges_;
 
+    // Создать соединение портов.
+    bool Connect(FlowOutputPort* fromPort, FlowInputPort* toPort);
+
 private:
     void HandleUpdate(StringHash eventType, VariantMap& eventData);
 };

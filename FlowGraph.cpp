@@ -55,3 +55,15 @@ void FlowGraph::HandleUpdate(StringHash eventType, VariantMap& eventData)
     }
 }
 
+// Тут надо сделать проверки на совпадение типов портов и отсутствие зацикливания.
+bool FlowGraph::Connect(FlowOutputPort* fromPort, FlowInputPort* toPort)
+{
+    SharedPtr<FlowEdge> link(new FlowEdge(context_));
+    link->fromPort_ = fromPort;
+    link->toPort_ = toPort;
+    fromPort->edge_ = link;
+    toPort->edge_ = link;
+    // Указатель на дугу надо хранить, чтоб не самоуничтожилась.
+    edges_.Push(link);
+    return true;
+}

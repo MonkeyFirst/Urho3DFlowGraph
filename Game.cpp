@@ -122,19 +122,19 @@ public:
         flowGraphExample_->nodes_.Push(starter);
 
         SharedPtr<CubeCreatorFlowNode> cubeCreator(new CubeCreatorFlowNode(context_));
-        cubeCreator->inputs_["Create!"]->data_ = true;
+        //cubeCreator->inputs_["Create!"]->data_ = true;
         cubeCreator->inputs_["Scene"]->data_ = (void*)scene_;
         flowGraphExample_->nodes_.Push(cubeCreator);
 
-        // Присоединяем криэйтор к стартеру. Все указатели вручную расставляются.
-        // Потом надо будет написать функцию, которая все это будет делать.
-        SharedPtr<FlowEdge> link(new FlowEdge(context_));
+        // Присоединяем криэйтор к стартеру.
+        flowGraphExample_->Connect(starter->outputs_["Start"], cubeCreator->inputs_["Create!"]);
+/*        SharedPtr<FlowEdge> link(new FlowEdge(context_));
         link->fromPort_ = starter->outputs_["Start"];
         link->toPort_ = cubeCreator->inputs_["Create!"];
         starter->outputs_["Start"]->edge_ = link;
         cubeCreator->inputs_["Create!"]->edge_ = link;
         // Указатель на дугу надо хранить, чтоб не самоуничтожилась.
-        flowGraphExample_->edges_.Push(link);
+        flowGraphExample_->edges_.Push(link);*/
     }
 
 };
