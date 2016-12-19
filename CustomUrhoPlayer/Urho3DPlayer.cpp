@@ -37,9 +37,31 @@
 
 #include "Urho3DPlayer.h"
 
-#include <Urho3D/DebugNew.h>
+//#include <Urho3D/DebugNew.h>
 
 URHO3D_DEFINE_APPLICATION_MAIN(Urho3DPlayer);
+
+#include "FlowPort.h"
+#include "FlowNode.h"
+#include "FlowGraph.h"
+#include "FlowEdge.h"
+#include "CameraControllerFlowNode.h"
+#include "StarterFlowNode.h"
+#include "CubeCreatorFlowNode.h"
+
+void Urho3DPlayer::RegisterASBindings()
+{
+    FlowOutputPort::RegisterObject(context_);
+
+    asIScriptEngine* engine = GetSubsystem<Script>()->GetScriptEngine();
+
+    // Порт
+    engine->RegisterGlobalProperty("const int VAR_ANY", (void*)&VAR_ANY);
+    RegisterObject<FlowOutputPort>(engine, "FlowOutputPort");
+    RegisterObjectConstructor<FlowOutputPort>(engine, "FlowOutputPort");
+    //RegisterNamedObjectConstructor<FlowOutputPort>(engine, "FlowOutputPort");
+    engine->RegisterObjectProperty("FlowOutputPort", "String name_", offsetof(FlowOutputPort, name_));
+}
 
 Urho3DPlayer::Urho3DPlayer(Context* context) :
     Application(context)
@@ -166,6 +188,8 @@ void Urho3DPlayer::Start()
 #ifdef URHO3D_ANGELSCRIPT
         // Instantiate and register the AngelScript subsystem
         context_->RegisterSubsystem(new Script(context_));
+
+        RegisterASBindings();
 
         // Hold a shared pointer to the script file to make sure it is not unloaded during runtime
         scriptFile_ = GetSubsystem<ResourceCache>()->GetResource<ScriptFile>(scriptFileName_);

@@ -54,6 +54,8 @@ private:
 
     /// Script file name.
     String scriptFileName_;
+
+    void RegisterASBindings();
     
 #ifdef URHO3D_ANGELSCRIPT
     /// Script file.
