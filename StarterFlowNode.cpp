@@ -4,9 +4,7 @@ StarterFlowNode::StarterFlowNode(Context* context) :
     FlowNode(context)
 {
     // Создаем выходной порт.
-    SharedPtr<FlowOutputPort> signalOutputPort(new FlowOutputPort(context));
-    signalOutputPort->node_ = this;
-    outputs_["Start"] = signalOutputPort;
+    CreateOutputPort("Start Signal");
 }
 
 void StarterFlowNode::Update(float timeStep)
@@ -14,11 +12,11 @@ void StarterFlowNode::Update(float timeStep)
     // Если это первый апдейт, то пишем true в выходной порт.
     if (!sended_)
     {
-        outputs_["Start"]->data_ = true;
+        outputs_[OUT_START_SIGNAL]->data_ = true;
         sended_ = true;
         return;
     }
     
     // Все остальное время пишем в порт false.
-    outputs_["Start"]->data_ = false;
+    outputs_[OUT_START_SIGNAL]->data_ = false;
 }

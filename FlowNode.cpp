@@ -11,9 +11,9 @@ void FlowNode::Update(float timeStep)
 
 bool FlowNode::IsInputNodesUpdated()
 {
-    for (HashMap<String, SharedPtr<FlowInputPort> >::Iterator i = inputs_.Begin(); i != inputs_.End(); ++i)
+    for (Vector<SharedPtr<FlowInputPort> >::Iterator i = inputs_.Begin(); i != inputs_.End(); ++i)
     {
-        FlowInputPort* port = i->second_;
+        FlowInputPort* port = *i;
 
         // Если к порту ничего не подключено, то возвращаем true.
         if (port->edge_.Expired())
@@ -32,4 +32,20 @@ bool FlowNode::IsInputNodesUpdated()
     }
 
     return true;
+}
+
+void FlowNode::CreateInputPort(const String& name)
+{
+    SharedPtr<FlowInputPort> port(new FlowInputPort(context_));
+    port->name_ = name;
+    port->node_ = this;
+    inputs_.Push(port);
+}
+
+void FlowNode::CreateOutputPort(const String& name)
+{
+    SharedPtr<FlowOutputPort> port(new FlowOutputPort(context_));
+    port->name_ = name;
+    port->node_ = this;
+    outputs_.Push(port);
 }

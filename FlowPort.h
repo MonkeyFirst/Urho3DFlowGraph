@@ -17,6 +17,9 @@ class URHO3D_API FlowOutputPort : public Object
 public:
     FlowOutputPort(Context* context);
 
+    // Текстовое имя порта отображается в редакторе.
+    String name_;
+
     // Флаунода, на которой находится данный порт.
     WeakPtr<FlowNode> node_;
 

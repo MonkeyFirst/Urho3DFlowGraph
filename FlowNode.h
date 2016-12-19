@@ -23,8 +23,8 @@ public:
     virtual void Update(float timeStep);
 
     // Порты флауноды.
-    HashMap<String, SharedPtr<FlowInputPort> > inputs_;
-    HashMap<String, SharedPtr<FlowOutputPort> > outputs_;
+    Vector<SharedPtr<FlowInputPort> > inputs_;
+    Vector<SharedPtr<FlowOutputPort> > outputs_;
 
     // Требуется ли выполнить апдейт для этой флауноды.
     bool needUpdate_ = true;
@@ -32,6 +32,10 @@ public:
     // Функция проверяет все входящие порты и возвращает true,
     // если все входящие флоуноды обновлены.
     bool IsInputNodesUpdated();
+
+    // СОздание портов, потом надо передавать еще и тип.
+    void CreateInputPort(const String& name);
+    void CreateOutputPort(const String& name);
 
     // Для визуального редактора - заголовок и координаты на холсте.
     // Пока не используются.

@@ -14,6 +14,12 @@ public:
     CameraControllerFlowNode(Context* context);
     void Update(float timeStep);
 
+    enum InputPort
+    {
+        IN_CAMERA_NODE = 0,
+        IN_MOUSE_SENSITIVITY = 1
+    };
+
     float yaw_ = 0.0f;
     float pitch_ = 0.0f;
 };

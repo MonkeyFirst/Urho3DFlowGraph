@@ -111,8 +111,8 @@ public:
         SharedPtr<CameraControllerFlowNode> cameraController(new CameraControllerFlowNode(context_));
         // Записываем данные в входные порты. Пользователь может это делать в редакторе.
         // Сами порты уже созданы в конструкторе CameraControllerFlowNode.
-        cameraController->inputs_["CameraNode"]->data_ = (void*)scene_->GetChild("Camera");
-        cameraController->inputs_["MouseSensitivity"]->data_ = 0.1f;
+        cameraController->inputs_[CameraControllerFlowNode::IN_CAMERA_NODE]->data_ = (void*)scene_->GetChild("Camera");
+        cameraController->inputs_[CameraControllerFlowNode::IN_MOUSE_SENSITIVITY]->data_ = 0.1f;
         // Добавляем эту флауноду в граф.
         flowGraphExample_->nodes_.Push(cameraController);
 
@@ -123,11 +123,12 @@ public:
 
         SharedPtr<CubeCreatorFlowNode> cubeCreator(new CubeCreatorFlowNode(context_));
         //cubeCreator->inputs_["Create!"]->data_ = true;
-        cubeCreator->inputs_["Scene"]->data_ = (void*)scene_;
+        cubeCreator->inputs_[CubeCreatorFlowNode::IN_SCENE]->data_ = (void*)scene_;
         flowGraphExample_->nodes_.Push(cubeCreator);
 
         // Присоединяем криэйтор к стартеру.
-        flowGraphExample_->Connect(starter->outputs_["Start"], cubeCreator->inputs_["Create!"]);
+        flowGraphExample_->Connect(starter->outputs_[StarterFlowNode::OUT_START_SIGNAL],
+            cubeCreator->inputs_[CubeCreatorFlowNode::IN_CREATE_SIGNAL]);
     }
 
 };

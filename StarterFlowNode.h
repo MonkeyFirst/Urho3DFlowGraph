@@ -14,6 +14,11 @@ public:
     StarterFlowNode(Context* context);
     void Update(float timeStep);
 
+    enum OutputPort
+    {
+        OUT_START_SIGNAL = 0
+    };
+
     // Был ли уже отправлен сигнал.
     bool sended_ = false;
 };
