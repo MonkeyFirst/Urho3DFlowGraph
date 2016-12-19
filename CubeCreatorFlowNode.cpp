@@ -4,8 +4,8 @@ CubeCreatorFlowNode::CubeCreatorFlowNode(Context* context) :
     FlowNode(context)
 {
     // Создаем входные порты.
-    CreateInputPort("Create Signal");
-    CreateInputPort("Scene");
+    CreateInputPort("Create Signal", VAR_BOOL);
+    CreateInputPort("Scene", VAR_VOIDPTR);
 }
 
 void CubeCreatorFlowNode::Update(float timeStep)

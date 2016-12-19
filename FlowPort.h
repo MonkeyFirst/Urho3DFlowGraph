@@ -10,6 +10,8 @@
 class FlowNode;
 class FlowEdge;
 
+static const int VAR_ANY = -1;
+
 class URHO3D_API FlowOutputPort : public Object
 {
     URHO3D_OBJECT(FlowOutputPort, Object);
@@ -30,6 +32,9 @@ public:
 
     // Соединение с портом другой ноды. Может отсутствовать.
     WeakPtr<FlowEdge> edge_;
+
+    // Ожидаемый тип переменной. Он может быть любым из "enum VariantType" или -1, если разрешена переменная любого типа.
+    int type_;
 };
 
 // Входной порт отличается от выходного функцией ReadData().

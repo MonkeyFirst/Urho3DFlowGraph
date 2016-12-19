@@ -34,8 +34,8 @@ public:
     bool IsInputNodesUpdated();
 
     // СОздание портов, потом надо передавать еще и тип.
-    void CreateInputPort(const String& name);
-    void CreateOutputPort(const String& name);
+    void CreateInputPort(const String& name, int type);
+    void CreateOutputPort(const String& name, int type);
 
     // Для визуального редактора - заголовок и координаты на холсте.
     // Пока не используются.

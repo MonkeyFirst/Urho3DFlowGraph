@@ -122,7 +122,7 @@ public:
         flowGraphExample_->nodes_.Push(starter);
 
         SharedPtr<CubeCreatorFlowNode> cubeCreator(new CubeCreatorFlowNode(context_));
-        //cubeCreator->inputs_["Create!"]->data_ = true;
+        //cubeCreator->inputs_[CubeCreatorFlowNode::IN_CREATE_SIGNAL]->data_ = true;
         cubeCreator->inputs_[CubeCreatorFlowNode::IN_SCENE]->data_ = (void*)scene_;
         flowGraphExample_->nodes_.Push(cubeCreator);
 

@@ -34,18 +34,20 @@ bool FlowNode::IsInputNodesUpdated()
     return true;
 }
 
-void FlowNode::CreateInputPort(const String& name)
+void FlowNode::CreateInputPort(const String& name, int type)
 {
     SharedPtr<FlowInputPort> port(new FlowInputPort(context_));
     port->name_ = name;
     port->node_ = this;
+    port->type_ = type;
     inputs_.Push(port);
 }
 
-void FlowNode::CreateOutputPort(const String& name)
+void FlowNode::CreateOutputPort(const String& name, int type)
 {
     SharedPtr<FlowOutputPort> port(new FlowOutputPort(context_));
     port->name_ = name;
     port->node_ = this;
+    port->type_ = type;
     outputs_.Push(port);
 }

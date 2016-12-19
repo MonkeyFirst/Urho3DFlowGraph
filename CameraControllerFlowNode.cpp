@@ -4,8 +4,8 @@ CameraControllerFlowNode::CameraControllerFlowNode(Context* context) :
     FlowNode(context)
 {
     // Создаем входные порты.
-    CreateInputPort("Camera Node");
-    CreateInputPort("Mouse Sensitivity");
+    CreateInputPort("Camera Node", VAR_VOIDPTR);
+    CreateInputPort("Mouse Sensitivity", VAR_FLOAT);
 }
 
 void CameraControllerFlowNode::Update(float timeStep)

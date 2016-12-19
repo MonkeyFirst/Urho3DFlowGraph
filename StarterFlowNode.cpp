@@ -4,7 +4,7 @@ StarterFlowNode::StarterFlowNode(Context* context) :
     FlowNode(context)
 {
     // Создаем выходной порт.
-    CreateOutputPort("Start Signal");
+    CreateOutputPort("Start Signal", VAR_BOOL);
 }
 
 void StarterFlowNode::Update(float timeStep)
