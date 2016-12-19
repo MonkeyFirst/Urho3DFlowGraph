@@ -28,6 +28,9 @@ public:
 
     void Start()
     {
+        GetSubsystem<Input>()->SetMouseVisible(true);
+        GetSubsystem<Input>()->CenterMousePosition();
+
         CreateScene();
         SetupViewport();
         SubscribeToEvents();
@@ -87,7 +90,7 @@ public:
 
         cameraNode_ = scene_->CreateChild("Camera");
         cameraNode_->CreateComponent<Camera>();
-        cameraNode_->SetPosition(Vector3(0.0f, 5.0f, 0.0f));
+        cameraNode_->SetPosition(Vector3(0.0f, 5.0f, -7.0f));
     }
 
     void SubscribeToEvents()

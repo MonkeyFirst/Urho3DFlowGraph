@@ -21,5 +21,5 @@ public:
     };
 
     float yaw_ = 0.0f;
-    float pitch_ = 0.0f;
+    float pitch_ = 45.0f;
 };

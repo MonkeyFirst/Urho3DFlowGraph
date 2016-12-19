@@ -22,7 +22,7 @@ void CubeCreatorFlowNode::Update(float timeStep)
     // Создаем куб в некоторой окрестности от нуля.
     ResourceCache* cache = GetSubsystem<ResourceCache>();
     Node* cubeNode = scene->CreateChild();
-    cubeNode->SetPosition(Vector3(Random(-2.5f, 2.5f), 0.0f, Random(-2.5f, 2.5f)));
+    cubeNode->SetPosition(Vector3(Random(-2.5f, 2.5f), 0.5f, Random(-2.5f, 2.5f)));
     cubeNode->SetRotation(Quaternion(0.0f, Random(360.0f), 0.0f));
     cubeNode->SetScale(1.0f);
     StaticModel* cubeObject = cubeNode->CreateComponent<StaticModel>();
