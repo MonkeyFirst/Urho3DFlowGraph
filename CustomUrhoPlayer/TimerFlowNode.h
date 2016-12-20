@@ -14,8 +14,10 @@ public:
 
 	enum InputPort
 	{
+		Active,
 		Period,
 		MaxTicks,
+		Reset,
 		InputLast
 	};
 
@@ -29,5 +31,18 @@ public:
 	void Update(float timeStep);
 	bool CheckTime(float period, float timeStep);
 
+private:
 	float elapsedTime;
+	bool defaultsCollected_;
+
+	struct 
+	{
+		bool active_;
+		float preriod_;
+		int maxticks_;
+	} timerDefaults;
+
+
+	void CollectDefaults();
+	void ResetToDefaults();
 };

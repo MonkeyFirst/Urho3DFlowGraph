@@ -100,6 +100,8 @@ public:
 	void SubscribeToEvents()
 	{
 		SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(Game, HandleUpdate));
+		SubscribeToEvent(E_KEYDOWN, URHO3D_HANDLER(Game, HandleKeyDown));
+
 	}
 
 	void HandleUpdate(StringHash eventType, VariantMap& eventData)
@@ -107,6 +109,19 @@ public:
 		using namespace Update;
 		float timeStep = eventData[P_TIMESTEP].GetFloat();
 
+	}
+
+	void HandleKeyDown(StringHash eventType, VariantMap& eventData)
+	{
+		using namespace KeyDown;
+		int key = eventData[P_KEY].GetInt();
+
+		// for testing ports only
+		if (key == KEY_1)
+			flowGraphTimerWithCubeCreate_->nodes_[0]->inputs_[TimerFlowNode::Active]->data_ = true;
+
+		if (key == KEY_2)
+			flowGraphTimerWithCubeCreate_->nodes_[0]->inputs_[TimerFlowNode::Reset]->data_ = true;
 	}
 
 	void CreateFlowGraph()
@@ -144,6 +159,8 @@ public:
 		SharedPtr<TimerFlowNode> TimerNode = SharedPtr<TimerFlowNode>(new TimerFlowNode(context_));
 		TimerNode->inputs_[TimerFlowNode::Period]->data_ = 0.5f; // sec
 		TimerNode->inputs_[TimerFlowNode::MaxTicks]->data_ = 10;
+		TimerNode->inputs_[TimerFlowNode::Active]->data_ = false;
+
 
 		SharedPtr<CubeCreatorFlowNode> CubeCreatorNode = SharedPtr<CubeCreatorFlowNode>(new CubeCreatorFlowNode(context_));
 		CubeCreatorNode->inputs_[CubeCreatorFlowNode::IN_SCENE]->data_ = (void*)scene_;
