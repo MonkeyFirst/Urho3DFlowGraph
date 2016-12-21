@@ -13,6 +13,8 @@ CubeCreatorFlowNode::CubeCreatorFlowNode(Context* context) :
 
 void CubeCreatorFlowNode::Update(float timeStep)
 {
+    //URHO3D_LOGWARNING("CubeCreatorFlowNode::Update");
+
     // Получаем сигнал к действию.
     bool signal = inputs_[IN_CREATE_SIGNAL]->ReadData().GetBool();
 

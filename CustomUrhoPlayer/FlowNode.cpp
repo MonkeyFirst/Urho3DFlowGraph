@@ -55,4 +55,10 @@ void FlowNode::CreateOutputPort(const String& name, int type)
     outputs_.Push(port);
 }
 
+void FlowNode::SetInputPortData(int port, const Variant& data)
+{
+    URHO3D_LOGWARNING("FlowNode::SetInputPortData " + String(port) + String(data));
+    inputs_[port]->data_ = data;
+}
+
 }

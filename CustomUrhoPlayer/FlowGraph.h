@@ -27,6 +27,8 @@ public:
     // Создать соединение портов.
     bool Connect(FlowOutputPort* fromPort, FlowInputPort* toPort);
 
+    void AddFlowNode(FlowNode* node);
+
 private:
     void HandleUpdate(StringHash eventType, VariantMap& eventData);
 };

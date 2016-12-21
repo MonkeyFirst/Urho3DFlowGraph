@@ -11,6 +11,8 @@ FlowGraph::FlowGraph(Context* context) :
 
 void FlowGraph::HandleUpdate(StringHash eventType, VariantMap& eventData)
 {
+    //URHO3D_LOGWARNING("FlowGraph::HandleUpdate");
+
     using namespace Update;
     float timeStep = eventData[P_TIMESTEP].GetFloat();
 
@@ -61,6 +63,7 @@ void FlowGraph::HandleUpdate(StringHash eventType, VariantMap& eventData)
 // Тут надо сделать проверки на совпадение типов портов и отсутствие зацикливания.
 bool FlowGraph::Connect(FlowOutputPort* fromPort, FlowInputPort* toPort)
 {
+    //URHO3D_LOGWARNING("FlowGraph::Connect");
     SharedPtr<FlowEdge> link(new FlowEdge(context_));
     link->fromPort_ = fromPort;
     link->toPort_ = toPort;
@@ -69,6 +72,12 @@ bool FlowGraph::Connect(FlowOutputPort* fromPort, FlowInputPort* toPort)
     // Указатель на дугу надо хранить, чтоб не самоуничтожилась.
     edges_.Push(link);
     return true;
+}
+
+void FlowGraph::AddFlowNode(FlowNode* node)
+{
+    URHO3D_LOGWARNING("FlowGraph::AddFlowNode");
+    nodes_.Push(SharedPtr<FlowNode>(node));
 }
 
 }

@@ -13,8 +13,13 @@ CameraControllerFlowNode::CameraControllerFlowNode(Context* context) :
 
 void CameraControllerFlowNode::Update(float timeStep)
 {
+    //URHO3D_LOGWARNING("CameraControllerFlowNode::Update");
+
     // Получаем указатель на ноду камеры из входного порта.
     Node* cameraNode = static_cast<Node*>(inputs_[IN_CAMERA_NODE]->ReadData().GetVoidPtr());
+    
+    //if (cameraNode)
+    //    URHO3D_LOGWARNING("camera node NORM");
     
     // Получаем чувствительность мышки из входного порта.
     float mouseSensitivity = inputs_[IN_MOUSE_SENSITIVITY]->ReadData().GetFloat();

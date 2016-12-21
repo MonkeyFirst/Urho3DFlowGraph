@@ -44,6 +44,8 @@ public:
     // Пока не используются.
     String name_;
     Vector2 position_;
+
+    void SetInputPortData(int port, const Variant& data);
 };
 
 }

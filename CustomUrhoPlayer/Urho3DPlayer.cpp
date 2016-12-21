@@ -49,18 +49,81 @@ URHO3D_DEFINE_APPLICATION_MAIN(Urho3DPlayer);
 #include "StarterFlowNode.h"
 #include "CubeCreatorFlowNode.h"
 
+// Обертки для некоторых вещей, чтобы экспортировать в AS.
+
+static FlowNode* FlowOutputPort_Get_FlowNode(FlowOutputPort* ptr)
+{
+    return ptr->node_;
+}
+
+static void FlowOutputPort_Set_FlowNode(FlowNode* node, FlowOutputPort* ptr)
+{
+    ptr->node_ = node;
+}
+
+static FlowEdge* FlowOutputPort_Get_FlowEdge(FlowOutputPort* ptr)
+{
+    return ptr->edge_;
+}
+
+static void FlowOutputPort_Set_FlowEdge(FlowEdge* edge, FlowOutputPort* ptr)
+{
+    ptr->edge_ = edge;
+}
+
+
 void Urho3DPlayer::RegisterASBindings()
 {
     FlowOutputPort::RegisterObject(context_);
 
     asIScriptEngine* engine = GetSubsystem<Script>()->GetScriptEngine();
 
-    // Порт
-    engine->RegisterGlobalProperty("const int VAR_ANY", (void*)&VAR_ANY);
+    // Регистрируем все объекты перед регистрацией их членов, так как члены используют эти типы.
     RegisterObject<FlowOutputPort>(engine, "FlowOutputPort");
+
+    RegisterObject<FlowInputPort>(engine, "FlowInputPort");
+    RegisterSubclass<FlowOutputPort, FlowInputPort>(engine, "FlowOutputPort", "FlowInputPort");
+    
+    RegisterObject<FlowNode>(engine, "FlowNode");
+    RegisterObject<FlowEdge>(engine, "FlowEdge");
+    RegisterObject<FlowGraph>(engine, "FlowGraph");
+
+    RegisterObject<CameraControllerFlowNode>(engine, "CameraControllerFlowNode");
+    
+
+    // ВООБЩЕ ВСЯ ЭТА ФИГНЯ ПОКА НЕ НУЖНА
+    // Выходной порт
+/*    engine->RegisterGlobalProperty("const int VAR_ANY", (void*)&VAR_ANY); // Глобальная константа
     RegisterObjectConstructor<FlowOutputPort>(engine, "FlowOutputPort");
-    //RegisterNamedObjectConstructor<FlowOutputPort>(engine, "FlowOutputPort");
     engine->RegisterObjectProperty("FlowOutputPort", "String name_", offsetof(FlowOutputPort, name_));
+    engine->RegisterObjectMethod("FlowOutputPort", "FlowNode@+ get_node_() const", asFUNCTION(FlowOutputPort_Get_FlowNode), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("FlowOutputPort", "void set_node_(FlowNode@+)", asFUNCTION(FlowOutputPort_Set_FlowNode), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectProperty("FlowOutputPort", "Variant data_", offsetof(FlowOutputPort, data_));
+    engine->RegisterObjectMethod("FlowOutputPort", "FlowEdge@+ get_edge_() const", asFUNCTION(FlowOutputPort_Get_FlowEdge), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("FlowOutputPort", "void set_edge_(FlowEdge@+)", asFUNCTION(FlowOutputPort_Set_FlowEdge), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectProperty("FlowOutputPort", "int type_", offsetof(FlowOutputPort, type_));*/
+    // Флаунода
+    // Дуга
+
+    // ======= Флауграф.
+    // Регистрируем конструктор.
+    RegisterObjectConstructor<FlowGraph>(engine, "FlowGraph");
+    engine->RegisterObjectMethod("FlowGraph", "void AddFlowNode(FlowNode@+)", asMETHODPR(FlowGraph, AddFlowNode, (FlowNode*), void), asCALL_THISCALL);
+
+    // Регистрируем примеры нод.
+
+    // ======= Контроллер камеры.
+    // Вообще тут переделать надо, так как наследование от флоуноды а нет объекта.
+    // Регистрируем конструктор.
+    RegisterObjectConstructor<CameraControllerFlowNode>(engine, "CameraControllerFlowNode");
+    RegisterSubclass<FlowNode, CameraControllerFlowNode>(engine, "FlowNode", "CameraControllerFlowNode");
+    // Регистрируем номера входных портов. Мб как-то иначе регистрировать.
+    //engine->RegisterEnum("CameraControllerFlowNodeInputs");
+    //engine->RegisterEnumValue("CameraControllerFlowNodeInputs", "IN_CAMERA_NODE", CameraControllerFlowNode::IN_CAMERA_NODE);
+    //engine->RegisterEnumValue("CameraControllerFlowNode", "IN_MOUSE_SENSITIVITY", CameraControllerFlowNode::IN_MOUSE_SENSITIVITY);
+    engine->RegisterObjectMethod("CameraControllerFlowNode", "void SetInputPortData(int, const Variant&in)", asMETHODPR(CameraControllerFlowNode, SetInputPortData, (int, const Variant&), void), asCALL_THISCALL);
+
+
 }
 
 Urho3DPlayer::Urho3DPlayer(Context* context) :
